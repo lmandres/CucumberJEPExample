@@ -24,3 +24,10 @@ hs_err_pid*
 
 # Maven target directory
 target/
+
+# Python virtual environment
+venv/
+
+# Python runtime files
+
+**/__pycache__/

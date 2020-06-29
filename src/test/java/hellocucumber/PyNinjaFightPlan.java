@@ -1,29 +1,42 @@
 package hellocucumber;
 
-import jep.Interpreter;
+import jep.JepConfig;
 import jep.JepException;
 import jep.SharedInterpreter;
 
 
 public class PyNinjaFightPlan extends NinjaFightPlan {
 
-    Interpreter interp = null;
+    SharedInterpreter interp = null;
 
-    public PyNinjaFightPlan() {
+    private void setJepConfig() {
+        try {
+            JepConfig jepcfg = new JepConfig();
+            jepcfg.addIncludePaths("./pyninja");
+
+            SharedInterpreter.setConfig(jepcfg);
+        } catch (JepException je) {
+        }
+    }
+
+    private void setUpNinjaFightPlan() {
+        this.setJepConfig();
         try {
             this.interp = new SharedInterpreter();
-            this.interp.exec("import pyninja.NinjaFightPlan");
-            this.interp.exec("fightPlan = pyninja.NinjaFightPlan()");
+            this.interp.exec("from NinjaFightPlan import NinjaFightPlan");
+            this.interp.exec("fightPlan = NinjaFightPlan()");
         } catch (JepException je) {
             System.err.println(je);
         }
     }
+
+    public PyNinjaFightPlan() {
+        this.setUpNinjaFightPlan();
+    }
  
     public PyNinjaFightPlan(int beltIn) {
+        this.setUpNinjaFightPlan();
         try {
-            this.interp = new SharedInterpreter();
-            this.interp.exec("import pyninja.NinjaFightPlan");
-            this.interp.exec("fightPlan = pyninja.NinjaFightPlan()");
             this.interp.invoke("fightPlan.setNinjaBelt", beltIn);
         } catch (JepException je) {
             System.err.println(je);
@@ -84,5 +97,13 @@ public class PyNinjaFightPlan extends NinjaFightPlan {
             System.err.println(je);
         }
         return returnFightDecision;
+    }
+
+    public void close() {
+        try {
+            this.interp.close();
+        } catch (JepException je) {
+            System.err.println(je);
+        }
     }
 }

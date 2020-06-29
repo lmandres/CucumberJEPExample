@@ -1,5 +1,7 @@
 package hellocucumber;
 
+import io.cucumber.java.After;
+import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -8,7 +10,12 @@ import static org.junit.Assert.assertEquals;
 
 public class StepDefinitions {
 
-    private NinjaFightPlan ninjaPlan = new PyNinjaFightPlan();
+    private PyNinjaFightPlan ninjaPlan = null;
+
+    @Before
+    public void set_up_ninja_fight_plan() {
+        this.ninjaPlan = new PyNinjaFightPlan();
+    }
 
     @Given("the ninja has a third level black-belt")
     public void the_ninja_has_a_third_level_black_belt() {
@@ -38,5 +45,11 @@ public class StepDefinitions {
     @Then("the ninja should run for his life")
     public void the_ninja_should_run_for_his_life() {
         assertEquals(this.ninjaPlan.fightOpponent(), false);
+    }
+
+    @After
+    public void close_ninja_fight_plan() {
+        this.ninjaPlan.close();
+        this.ninjaPlan = null;
     }
 }

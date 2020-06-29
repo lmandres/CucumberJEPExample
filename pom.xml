@@ -56,6 +56,7 @@
                     <encoding>UTF-8</encoding>
                     <source>1.8</source>
                     <target>1.8</target>
+                    <argLine>-Djava.library.path=${basedir}/venv/lib/python3.8/site-packages</argLine>
                 </configuration>
             </plugin>
         </plugins>
